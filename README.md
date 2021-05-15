@@ -2,7 +2,7 @@
 
 #### ・Simple JavaScript  Invites Manager Discord Bot Powerd By: NAAR Studio.
 
-## 🔌 Getting Started
+## 🔌 Getting started
 
 #### 💻 PC
 
@@ -10,34 +10,39 @@ first setup your pc!
 
 `-` Install The [Node.Js](https://nodejs.org/en/)
 
+`-` then install any code editor for now we use [VS Code](https://code.visualstudio.com/)
+
+`-` then to clone the repositorie you have to install the [Git](https://git-scm.com/)
+
+`-` when you install [Git](https://git-scm.com/) Right Click any any folder and chose `Git Bash Here`
+
+`-` the app well open a terminal for you, type this command in `git clone https://github.com/NIR0-V/invite-Manager.git`
+
+`-` then the app ends the clone, go inside the cloned repositorie with this command `cd invite-Manager`
+
+`-` then the app go inside the the cloned repositorie run this command `npm install` to install the packges
+
+##### 💨 Run the project on pc
+
+`-` then the app ends instaling the packges open your code editor with the cloned repositorie for us type this command `code .` to open the [VS Code](https://code.visualstudio.com/)
+
+`-` the [VS Code](https://code.visualstudio.com/) is now editing!, you well just find a file called `config.js`
+
+`-` now fill in the data like this ⬇
+
 ```js
-git clone 
-cd invite-Manager
-npm install
-```
-
-
-## 💨 Run the package
-
-first type this line in your main js file and modify it:
-
-```js
-require('naar-music-bot').data_file_name("< your data file name (only json Example: config.json)>")
-```
-
-then make file with a name you are chose, type this script inside and modify it:
-
-```json
-{
-    "Music.Bot": {
-        "prefix": "your bot prefix",
-        "activety": "your bot activety",
-        "stay_room_id": "your voice room id the bot will be in thare 24/7",
-        "cmd_help": true to make the help command on false to make the help command off,
-        "token": "your bot token"
-    }
+module.exports = {
+    prefix: "", // your bot prefix
+    token: "" // your bot token you can get from here: https://discord.com/developers/applications/
 }
 ```
+
+`-` now press `ctrl + s` to save the changes
+
+`-` fainaly go back to the [Git](https://git-scm.com/) and type `node .`
+
+`-` your bot is ready to use
+
 
 
 ## 💖 Any Bug Or Suggestion
@@ -46,7 +51,7 @@ then make file with a name you are chose, type this script inside and modify it:
 
 ## ❗ License
 
-#### ・[MIT](https://choosealicense.com/licenses/mit/#)
+#### ・[MIT](https://github.com/NIR0-V/invite-Manager/blob/main/LICENSE)
 
 ## 💌 NAAR Studio
 
