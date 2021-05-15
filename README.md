@@ -4,8 +4,6 @@
 
 ## 🔌 Getting started
 
-#### 💻 PC
-
 first setup your pc!
 
 `-` Install The [Node.Js](https://nodejs.org/en/)
@@ -22,7 +20,7 @@ first setup your pc!
 
 `-` then the app go inside the the cloned repositorie run this command `npm install` to install the packges
 
-##### 💨 Run the project on pc
+## 💨 Run the project on pc
 
 `-` then the app ends instaling the packges open your code editor with the cloned repositorie for us type this command `code .` to open the [VS Code](https://code.visualstudio.com/)
 
@@ -42,8 +40,6 @@ module.exports = {
 `-` fainaly go back to the [Git](https://git-scm.com/) and type `node .`
 
 `-` your bot is ready to use
-
-
 
 ## 💖 Any Bug Or Suggestion
 
