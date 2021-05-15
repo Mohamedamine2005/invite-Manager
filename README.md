@@ -31,6 +31,7 @@ first setup your pc!
 ```js
 module.exports = {
     prefix: "", // your bot prefix
+    owners: [""], // your id or the bot owners id
     token: "" // your bot token you can get from here: https://discord.com/developers/applications/
 }
 ```
