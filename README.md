@@ -8,7 +8,7 @@
 
 first setup your pc!
 
-`-` Install The [![Node.Js](https://media.discordapp.net/attachments/776819669213642754/843228744352661514/919825-removebg-preview.png)](https://nodejs.org/en/)
+`-` Install The [![Node.Js](https://media.discordapp.net/attachments/776819669213642754/843229904489545748/1621112063627.png)](https://nodejs.org/en/)
 
 ```js
 git clone 
