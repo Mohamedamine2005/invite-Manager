@@ -20,7 +20,7 @@ module.exports = {
                 if (prefix == null || undefined) db.set(`Prefix_${message.guild.id}`, { data: client.config.prefix });
                 if (!args[1]) {
                     if (regular == null || undefined || fack == null || undefined || inviter == null || undefined || all == null || undefined) {
-                        db.set(`Gda_${message.author.id}_${message.guild.id}`, {
+                        db.set(`Gda_${user.id}_${message.guild.id}`, {
                             invitedBy: 0,
                             invitedByP: 0,
                             invitedByA: 0,
@@ -31,12 +31,11 @@ module.exports = {
                             invitedUrl: 0,
                             invites: []
                         });
-                        db.set(`bonus_${user.id}_${message.guild.id}`, { value: 0 })
                         message.channel.send(
                                 new MessageEmbed()
                                 .setColor(message.member.displayHexColor)
-                                .setAuthor(user.username, message.author.avatarURL({ dynamic: true }))
-                                .setDescription(`You have **${regular}** invites! (**${all} **regular, **${bonus}** bonus, **${fack} ** fake, **${leaves} ** leaves)\n Your invites: ${db.get(`Gda_${user.id}_${message.guild.id}.invites`)}`)
+                                .setAuthor(user.username, user.avatarURL({ dynamic: true }))
+                                .setDescription(`You have **${regular}** invites! (**${all} **regular, **${bonus}** bonus, **${fack} ** fake, **${leaves} ** leaves)`)
                                 .setFooter(`Invited By: ${db.get(`Gda_${user.id}_${message.guild.id}.invitedByP`)}`, db.get(`Gda_${user.id}_${message.guild.id}.invitedByA`))
                                 .setTimestamp()
                         ).then(() => {
@@ -47,19 +46,17 @@ module.exports = {
                     message.channel.send(
                             new MessageEmbed()
                             .setColor(message.member.displayHexColor)
-                            .setAuthor(user.username, message.author.avatarURL({ dynamic: true }))
                             .setDescription(`You have **${regular}** invites! (**${all} **regular, **${bonus}** bonus, **${fack} ** fake, **${leaves} ** leaves)`)
                             .setFooter(`Invited By: ${db.get(`Gda_${user.id}_${message.guild.id}.invitedByP`)}`, db.get(`Gda_${user.id}_${message.guild.id}.invitedByA`))
                             .setTimestamp()
-            ).then(() => {
-                message.channel.stopTyping();
-            })
+                    ).then(() => {
+                        message.channel.stopTyping();
+                    })
                 }
                 if (args[1] == "fetch") {
                     message.channel.send(
                             new MessageEmbed()
                             .setColor(message.member.displayHexColor)
-                            .setAuthor(user.username, message.author.avatarURL({ dynamic: true }))
                             .setDescription(`You have invited **${db.get(`Gda_${user.id}_${message.guild.id}.invites`)}**`)
                 .setFooter(`Invited By: ${db.get(`Gda_${user.id}_${message.guild.id}.invitedByP`)}`, db.get(`Gda_${user.id}_${message.guild.id}.invitedByA`))
                 .setTimestamp()
