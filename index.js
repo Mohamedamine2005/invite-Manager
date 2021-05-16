@@ -118,14 +118,9 @@ client.on("guildMemberAdd", async member => {
       } else {
         if (member.id == usedInvite.inviter.id) return;
         db.add(
-          `Gda_${usedInvite.inviter.id}_${member.guild.id}.regular`,
-          Number(usedInvite.uses) -
-            db.get(`Gda_${usedInvite.inviter.id}_${member.guild.id}.fack`)
-        );
+          `Gda_${usedInvite.inviter.id}_${member.guild.id}.regular`, 1);
         db.add(
-          `Gda_${usedInvite.inviter.id}_${member.guild.id}.all`,
-          Number(usedInvite.uses)
-        );
+          `Gda_${usedInvite.inviter.id}_${member.guild.id}.all`, 1);
         db.push(
           `Gda_${usedInvite.inviter.id}_${member.guild.id}.invites`,
           member.id
