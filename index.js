@@ -1,5 +1,6 @@
 require('./src/server/server.js')
 require("dotenv");
+const Discord  = require('discord.js')
 const { Client, Collection, MessageEmbed } = require("discord.js");
 require("discord-reply");
 const client = new Client();
