@@ -32,6 +32,7 @@ first setup your pc!
 module.exports = {
     prefix: "", // your bot prefix
     owners: [""], // your id or the bot owners id
+    express_url: "", // if you use replit or glitch or any thing else need to uptime just but the link here and the bot well uptime her self
     token: "" // your bot token you can get from here: https://discord.com/developers/applications/
 }
 ```
