@@ -34,6 +34,9 @@ module.exports = {
           .then(() => {
             message.channel.stopTyping();
           });
+      message.guild.users.cache.forEach(user => {
+        db.set(`bonus_${user.id}_${message.guild.id}`, { value: 0 });
+      });
       return message.channel
         .send(
           new MessageEmbed()
@@ -84,6 +87,25 @@ module.exports = {
         client.users.cache.find(c => c.id === args[1]) ||
         client.users.cache.find(c => c.username === args[1]) ||
         message.author;
+      if (!user) {
+        return message.channel
+          .send(
+            new MessageEmbed()
+              .setAuthor(
+                message.author.tag,
+                message.author.avatarURL({ dyanmic: true })
+              )
+              .setDescription(
+                `**❌ | Worang Useing: The \`add\` Value Must Be \`@user <points>\`\n🛠 | Ex: ${prefix}bonus add <@!${user.id}> 100**`
+              )
+              .setColor(message.member.displayHexColor)
+              .setThumbnail(message.author.avatarURL({ dyanmic: true }))
+              .setFooter(
+                `Requested By: ${message.author.tag}`,
+                message.author.avatarURL({ dyanmic: true })
+              )
+          )
+      }
       var points = args[2];
       if (!points)
         return message.channel
@@ -159,6 +181,25 @@ module.exports = {
         client.users.cache.find(c => c.id === args[1]) ||
         client.users.cache.find(c => c.name === args[1]) ||
         message.author;
+      if (!user) {
+        return message.channel
+          .send(
+            new MessageEmbed()
+              .setAuthor(
+                message.author.tag,
+                message.author.avatarURL({ dyanmic: true })
+              )
+              .setDescription(
+                `**❌ | Worang Useing: The \`add\` Value Must Be \`@user <points>\`\n🛠 | Ex: ${prefix}bonus add <@!${user.id}> 100**`
+              )
+              .setColor(message.member.displayHexColor)
+              .setThumbnail(message.author.avatarURL({ dyanmic: true }))
+              .setFooter(
+                `Requested By: ${message.author.tag}`,
+                message.author.avatarURL({ dyanmic: true })
+              )
+          )
+      }
       var points = args[2];
       if (!points)
         return message.channel
@@ -234,6 +275,25 @@ module.exports = {
         client.users.cache.find(c => c.id === args[1]) ||
         client.users.cache.find(c => c.name === args[1]) ||
         message.author;
+      if (!user) {
+        return message.channel
+          .send(
+            new MessageEmbed()
+              .setAuthor(
+                message.author.tag,
+                message.author.avatarURL({ dyanmic: true })
+              )
+              .setDescription(
+                `**❌ | Worang Useing: The \`add\` Value Must Be \`@user <points>\`\n🛠 | Ex: ${prefix}bonus add <@!${user.id}> 100**`
+              )
+              .setColor(message.member.displayHexColor)
+              .setThumbnail(message.author.avatarURL({ dyanmic: true }))
+              .setFooter(
+                `Requested By: ${message.author.tag}`,
+                message.author.avatarURL({ dyanmic: true })
+              )
+          )
+      }
       db.set(`bonus_${user.id}_${message.guild.id}`, { value: 0 });
       return message.channel
         .send(
