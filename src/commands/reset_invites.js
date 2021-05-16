@@ -23,39 +23,19 @@ module.exports = {
                 ).then(() => {
                     message.channel.stopTyping();
                 })
-            if (!args[0]) {
-                var user = message.mentions.users.first() || client.users.cache.get(args[1]) || client.users.cache.find(c => c.id === args[1]) || client.users.cache.find(c => c.name === args[1]) || message.author;
+            message.guild.members.cache.forEach(user => {
                 var data = db.get(`Gda_${user.id}_${message.guild.id}.all`)
                 var data2 = db.get(`Gda_${user.id}_${message.guild.id}.fack`)
                 var data3 = db.get(`Gda_${user.id}_${message.guild.id}.leaves`)
                 var data4 = db.get(`Gda_${user.id}_${message.guild.id}.regular`)
+                var data5 = db.get(`bonus_${user.id}_${message.guild.id}.value`);
                 db.subtract(`Gda_${user.id}_${message.guild.id}.all`, Number(data))
                 db.subtract(`Gda_${user.id}_${message.guild.id}.fack`, Number(data2))
                 db.subtract(`Gda_${user.id}_${message.guild.id}.leaves`, Number(data3))
                 db.subtract(`Gda_${user.id}_${message.guild.id}.regular`, Number(data4))
-                return message.channel.send(
-                    new MessageEmbed().setAuthor(message.author.tag, message.author.avatarURL({ dyanmic: true }))
-                    .setDescription(
-                        `**✅ | Data Save: The Bot Reseted <@!${user.id}> Invites!.**`
-                    )
-                    .setColor(message.member.displayHexColor)
-                    .setThumbnail(message.author.avatarURL({ dyanmic: true }))
-                    .setFooter(`Requested By: ${message.author.tag}`, message.author.avatarURL({ dyanmic: true }))
-                ).then(() => {
-                    message.channel.stopTyping();
-                })
-            } else if (args[0] === "all") {
-                message.guild.users.cache.forEach(user => {
-                    var data = db.get(`Gda_${user.id}_${message.guild.id}.all`)
-                    var data2 = db.get(`Gda_${user.id}_${message.guild.id}.fack`)
-                    var data3 = db.get(`Gda_${user.id}_${message.guild.id}.leaves`)
-                    var data4 = db.get(`Gda_${user.id}_${message.guild.id}.regular`)
-                    db.subtract(`Gda_${user.id}_${message.guild.id}.all`, Number(data))
-                    db.subtract(`Gda_${user.id}_${message.guild.id}.fack`, Number(data2))
-                    db.subtract(`Gda_${user.id}_${message.guild.id}.leaves`, Number(data3))
-                    db.subtract(`Gda_${user.id}_${message.guild.id}.regular`, Number(data4))
-                })
-                return message.channel.send(
+                db.subtract(`bonus_${user.id}_${message.guild.id}.value`, Number(data5));
+            })
+            return message.channel.send(
                     new MessageEmbed().setAuthor(message.author.tag, message.author.avatarURL({ dyanmic: true }))
                     .setDescription(
                         `**✅ | Data Save: The Bot Reseted All Guild Members Invites!.**`
@@ -65,7 +45,6 @@ module.exports = {
                     .setFooter(`Requested By: ${message.author.tag}`, message.author.avatarURL({ dyanmic: true }))
                 ).then(() => {
                     message.channel.stopTyping();
-                })
-            } // All Copyrights Go's To </> NAAR Studio: https://discord.gg/YJ6mUdgTsc
+                }) // All Copyrights Go's To </> NAAR Studio: https://discord.gg/YJ6mUdgTsc
         } // All Copyrights Go's To </> NAAR Studio: https://discord.gg/YJ6mUdgTsc
 }; // All Copyrights Go's To </> NAAR Studio: https://discord.gg/YJ6mUdgTsc
