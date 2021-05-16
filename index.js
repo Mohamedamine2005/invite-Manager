@@ -213,7 +213,7 @@ client.on("guildMemberAdd", member => {
             )
         )
         .setColor(member.displayHexColor)
-        .setThumbnail(db.get(`Gda_${member.id}_${member.guild.id}.invitedByA`))
+        .setThumbnail(db.get(`Gda_${member.id}_${member.guild.id}.invitedByA`)) // delete this line if you wont
         .setFooter(
           `Invited By: ${db.get(
             `Gda_${member.id}_${member.guild.id}.invitedByP`
@@ -335,8 +335,10 @@ client.on("guildMemberRemove", member => {
     if (invier == null || undefined || NaN) return;
     if (invier == member.id) return;
     if (invier == user.id) {
-      db.subtract(`Gda_${user.id}_${member.guild.id}.regular`, 1);
+      var check = db.get(`Gda_${user.id}_${member.guild.id}.regular`)
       db.add(`Gda_${user.id}_${member.guild.id}.leaves`, 1);
+      if (check == 0) return;
+      db.subtract(`Gda_${user.id}_${member.guild.id}.regular`, 1)
     }
   });
 });
