@@ -1,6 +1,6 @@
 require("./src/server/server.js");
 require("dotenv");
-const Discord  = require('discord.js')
+const Discord = require('discord.js')
 const { Client, Collection, MessageEmbed } = require("discord.js");
 require("discord-reply");
 const client = new Client();
@@ -12,185 +12,171 @@ client.config = require("./config.js");
 client.commands = new Collection();
 
 fs.readdir("./src/events/", (err, files) => {
-  if (err) return console.log(chalk.red.bold(err));
-  files.forEach(file => {
-    if (!file.endsWith(".js")) return;
-    const event = require(`./src/events/${file}`);
-    let eventName = file.split(".")[0];
-    console.log(
-      chalk.green.bold("Loading Event: ") + chalk.red.bold(`"${eventName}"`)
-    );
-    client.on(eventName, event.bind(null, client));
-  });
+    if (err) return console.log(chalk.red.bold(err));
+    files.forEach(file => {
+        if (!file.endsWith(".js")) return;
+        const event = require(`./src/events/${file}`);
+        let eventName = file.split(".")[0];
+        console.log(
+            chalk.green.bold("Loading Event: ") + chalk.red.bold(`"${eventName}"`)
+        );
+        client.on(eventName, event.bind(null, client));
+    });
 });
 fs.readdir(`./src/commands/`, (err, files) => {
-  if (err) return console.log(chalk.red.bold(err));
-  files.forEach(file => {
-    if (!file.endsWith(".js")) return;
-    const command = require(`./src/commands/${file}`);
-    let commandName = file.split(".")[0];
-    console.log(
-      chalk.green.bold("Loading Command: ") + chalk.red.bold(`"${commandName}"`)
-    );
-    client.commands.set(command.name, command);
-  });
+    if (err) return console.log(chalk.red.bold(err));
+    files.forEach(file => {
+        if (!file.endsWith(".js")) return;
+        const command = require(`./src/commands/${file}`);
+        let commandName = file.split(".")[0];
+        console.log(
+            chalk.green.bold("Loading Command: ") + chalk.red.bold(`"${commandName}"`)
+        );
+        client.commands.set(command.name, command);
+    });
 });
 
 const guildInvites = new Map();
 
 client.on("inviteCreate", async invite =>
-  guildInvites.set(invite.guild.id, await invite.guild.fetchInvites())
+    guildInvites.set(invite.guild.id, await invite.guild.fetchInvites())
 );
 client.on("ready", () => {
-  client.guilds.cache.forEach(guild => {
-    guild
-      .fetchInvites()
-      .then(invites => guildInvites.set(guild.id, invites))
-      .catch(err => console.log(err));
-  });
+    client.guilds.cache.forEach(guild => {
+        guild
+            .fetchInvites()
+            .then(invites => guildInvites.set(guild.id, invites))
+            .catch(err => console.log(err));
+    });
 });
 
 client.on("guildMemberAdd", async member => {
-  const cachedInvites = guildInvites.get(member.guild.id);
-  const newInvites = await member.guild.fetchInvites();
-  guildInvites.set(member.guild.id, newInvites);
-  try {
-    let d = new Date(member.user.createdAt);
-    let registeredDate = d.getMonth();
-    console.log(registeredDate);
-    const usedInvite = newInvites.find(
-      inv => cachedInvites.get(inv.code).uses < inv.uses
-    );
-    db.set(`Gda_${member.id}_${member.guild.id}`, {
-      invitedBy: usedInvite.inviter.id,
-      invitedByP: usedInvite.inviter.tag,
-      invitedByA: usedInvite.inviter.avatarURL({ dynamic: true }),
-      regular: 0,
-      fack: 0,
-      leaves: 0,
-      all: 0,
-      invitedUrl: usedInvite.url,
-      invites: ["", ""]
-    });
-    var regular = db.get(
-      `GmaInfo_${usedInvite.inviter.id}_${member.guild.id}.fack`
-    );
-    var ConfigFakeTime = db.get(`ConfigFakeTime_${member.guild.id}.value`);
-    if (ConfigFakeTime == null || undefined) ConfigFakeTime = 3;
-    if (regular == null || undefined) {
-      db.set(`Gda_${usedInvite.inviter.id}_${member.guild.id}`, {
-        invitedBy: usedInvite.inviter.id,
-        invitedByP: usedInvite.inviter.tag,
-        invitedByA: usedInvite.inviter.avatarURL({ dynamic: true }),
-        regular: 0,
-        fack: 0,
-        leaves: 0,
-        all: 0,
-        invitedUrl: usedInvite.url,
-        invites: ["", ""]
-      });
-      if (
-        registeredDate == null ||
-        undefined ||
-        NaN ||
-        registeredDate < ConfigFakeTime
-      ) {
-        if (member.id == usedInvite.inviter.id) return;
-        db.add(`Gda_${usedInvite.inviter.id}_${member.guild.id}.fack`, 1);
-        db.add(
-          `Gda_${usedInvite.inviter.id}_${member.guild.id}.all`,
-          1
+    const cachedInvites = guildInvites.get(member.guild.id);
+    const newInvites = await member.guild.fetchInvites();
+    guildInvites.set(member.guild.id, newInvites);
+    try {
+        let d = new Date(member.user.createdAt);
+        let registeredDate = d.getMonth();
+        console.log(registeredDate);
+        const usedInvite = newInvites.find(
+            inv => cachedInvites.get(inv.code).uses < inv.uses
         );
-        setTimeout(() => {
-          db.add(
-          `Gda_${usedInvite.inviter.id}_${member.guild.id}.regular`,
-          Number(db.get(`Gda_${usedInvite.inviter.id}_${member.guild.id}.all`)) -
-            Number(db.get(`Gda_${usedInvite.inviter.id}_${member.guild.id}.fack`))
-        );
-        }, 500);
-        var chack = db.get(
-          `Gda_${usedInvite.inviter.id}_${member.guild.id}.invites`
-        );
-        if (chack.includes(member.id)) return;
-        db.push(
-          `Gda_${usedInvite.inviter.id}_${member.guild.id}.invites`,
-          member.id
-        );
-      } else {
-        if (member.id == usedInvite.inviter.id) return;
-        db.add(
-          `Gda_${usedInvite.inviter.id}_${member.guild.id}.regular`,
-          Number(db.get(`Gda_${usedInvite.inviter.id}_${member.guild.id}.all`)) -
-            Number(db.get(`Gda_${usedInvite.inviter.id}_${member.guild.id}.fack`))
-        );
-        db.add(`Gda_${usedInvite.inviter.id}_${member.guild.id}.all`, 1);
-        db.push(
-          `Gda_${usedInvite.inviter.id}_${member.guild.id}.invites`,
-          member.id
-        );
-      }
-      return;
+        db.set(`Gda_${member.id}_${member.guild.id}`, {
+            invitedBy: usedInvite.inviter.id,
+            invitedByP: usedInvite.inviter.tag,
+            invitedByA: usedInvite.inviter.avatarURL({ dynamic: true }),
+            regular: 0,
+            fack: 0,
+            leaves: 0,
+            all: 0,
+            invitedUrl: usedInvite.url,
+            invites: ["", ""]
+        });
+        var regular = db.get(`GmaInfo_${usedInvite.inviter.id}_${member.guild.id}.regular`);
+        var ConfigFakeTime = db.get(`ConfigFakeTime_${member.guild.id}.value`);
+        if (ConfigFakeTime == null || undefined) ConfigFakeTime = 3;
+        if (regular == null || undefined) {
+            db.set(`Gda_${usedInvite.inviter.id}_${member.guild.id}`, {
+                invitedBy: '',
+                invitedByP: '',
+                invitedByA: '',
+                regular: 0,
+                fack: 0,
+                leaves: 0,
+                all: 0,
+                invitedUrl: '',
+                invites: ["", ""]
+            });
+            if (
+                registeredDate == null ||
+                undefined ||
+                NaN ||
+                registeredDate < ConfigFakeTime
+            ) {
+                if (member.id == usedInvite.inviter.id) return;
+                db.add(`Gda_${usedInvite.inviter.id}_${member.guild.id}.fack`, 1);
+                db.add(`Gda_${usedInvite.inviter.id}_${member.guild.id}.all`, Number(usedInvite.uses));
+                setTimeout(() => {
+                    db.add(
+                        `Gda_${usedInvite.inviter.id}_${member.guild.id}.regular`,
+                        Number(db.get(`Gda_${usedInvite.inviter.id}_${member.guild.id}.all`)) -
+                        Number(db.get(`Gda_${usedInvite.inviter.id}_${member.guild.id}.fack`))
+                    );
+                }, 1000);
+                var chack = db.get(`Gda_${usedInvite.inviter.id}_${member.guild.id}.invites`);
+                if (chack.includes(member.id)) return;
+                db.push(`Gda_${usedInvite.inviter.id}_${member.guild.id}.invites`, member.id);
+            } else {
+                if (member.id == usedInvite.inviter.id) return;
+                db.add(`Gda_${usedInvite.inviter.id}_${member.guild.id}.all`, Number(usedInvite.uses));
+                setTimeout(() => {
+                    db.add(
+                        `Gda_${usedInvite.inviter.id}_${member.guild.id}.regular`,
+                        Number(db.get(`Gda_${usedInvite.inviter.id}_${member.guild.id}.all`)) -
+                        Number(db.get(`Gda_${usedInvite.inviter.id}_${member.guild.id}.fack`))
+                    );
+                }, 1000);
+                var chack = db.get(`Gda_${usedInvite.inviter.id}_${member.guild.id}.invites`);
+                if (chack.includes(member.id)) return;
+                db.push(`Gda_${usedInvite.inviter.id}_${member.guild.id}.invites`, member.id);
+            }
+            return;
+        }
+        if (
+            registeredDate == null ||
+            undefined ||
+            NaN ||
+            registeredDate < ConfigFakeTime
+        ) {
+            if (member.id == usedInvite.inviter.id) return;
+            db.add(`Gda_${usedInvite.inviter.id}_${member.guild.id}.fack`, 1);
+            db.add(`Gda_${usedInvite.inviter.id}_${member.guild.id}.all`, Number(usedInvite.uses));
+            setTimeout(() => {
+                db.add(
+                    `Gda_${usedInvite.inviter.id}_${member.guild.id}.regular`,
+                    Number(db.get(`Gda_${usedInvite.inviter.id}_${member.guild.id}.all`)) -
+                    Number(db.get(`Gda_${usedInvite.inviter.id}_${member.guild.id}.fack`))
+                );
+            }, 1000);
+            var chack = db.get(
+                `Gda_${usedInvite.inviter.id}_${member.guild.id}.invites`
+            );
+            if (chack.includes(member.id)) return;
+            db.push(
+                `Gda_${usedInvite.inviter.id}_${member.guild.id}.invites`,
+                member.id
+            );
+        } else {
+            if (member.id == usedInvite.inviter.id) return;
+            db.add(`Gda_${usedInvite.inviter.id}_${member.guild.id}.all`, Number(usedInvite.uses));
+            setTimeout(() => {
+                db.add(
+                    `Gda_${usedInvite.inviter.id}_${member.guild.id}.regular`,
+                    Number(db.get(`Gda_${usedInvite.inviter.id}_${member.guild.id}.all`)) -
+                    Number(db.get(`Gda_${usedInvite.inviter.id}_${member.guild.id}.fack`))
+                );
+            }, 1000);
+            var chack = db.get(`Gda_${usedInvite.inviter.id}_${member.guild.id}.invites`);
+            if (chack.includes(member.id)) return;
+            db.push(`Gda_${usedInvite.inviter.id}_${member.guild.id}.invites`, member.id);
+        }
+    } catch (err) {
+        console.log(err);
     }
-    if (
-      registeredDate == null ||
-      undefined ||
-      NaN ||
-      registeredDate < ConfigFakeTime
-    ) {
-      if (member.id == usedInvite.inviter.id) return;
-      db.add(`Gda_${usedInvite.inviter.id}_${member.guild.id}.fack`, 1);
-      db.add(
-        `Gda_${usedInvite.inviter.id}_${member.guild.id}.all`,
-        1
-      );
-      setTimeout(() => {
-        db.add(
-          `Gda_${usedInvite.inviter.id}_${member.guild.id}.regular`,
-          Number(db.get(`Gda_${usedInvite.inviter.id}_${member.guild.id}.all`)) -
-            Number(db.get(`Gda_${usedInvite.inviter.id}_${member.guild.id}.fack`))
-        );
-      }, 500);
-      var chack = db.get(
-        `Gda_${usedInvite.inviter.id}_${member.guild.id}.invites`
-      );
-      if (chack.includes(member.id)) return;
-      db.push(
-        `Gda_${usedInvite.inviter.id}_${member.guild.id}.invites`,
-        member.id
-      );
-    } else {
-      if (member.id == usedInvite.inviter.id) return;
-      db.add(
-          `Gda_${usedInvite.inviter.id}_${member.guild.id}.regular`,
-          Number(db.get(`Gda_${usedInvite.inviter.id}_${member.guild.id}.all`)) -
-            Number(db.get(`Gda_${usedInvite.inviter.id}_${member.guild.id}.fack`))
-        );
-      db.add(
-        `dInvite.inviter.id}_${member.guild.id}.all`,
-        1
-      );
-      db.push(
-        `Gda_${usedInvite.inviter.id}_${member.guild.id}.invites`,
-        member.id
-      );
-    }
-  } catch (err) {
-    console.log(err);
-  }
 });
 
 client.on("guildMemberAdd", member => {
-  var channeler = db.get(`ConfigWelcomeChannel_${member.guild.id}.value`);
-  if (channeler == null || undefined) return;
-  var channel = member.guild.channels.cache.get(channeler);
-  var embed = db.get(`ConfigWelcomeChannelEmbed_${member.guild.id}.value`);
-  var invierTemp = db.get(`Gda_${member.id}_${member.guild.id}.invitedBy`);
-  if (invierTemp == null || undefined) return;
-  var ConfigWelcomeChannelMessage = db.get(
-    `ConfigWelcomeChannelMessage_${member.guild.id}.value`
-  );
-  if (ConfigWelcomeChannelMessage == null || undefined)
-    ConfigWelcomeChannelMessage = `**<@!${
+            var channeler = db.get(`ConfigWelcomeChannel_${member.guild.id}.value`);
+            if (channeler == null || undefined) return;
+            var channel = member.guild.channels.cache.get(channeler);
+            var embed = db.get(`ConfigWelcomeChannelEmbed_${member.guild.id}.value`);
+            var invierTemp = db.get(`Gda_${member.id}_${member.guild.id}.invitedBy`);
+            if (invierTemp == null || undefined) return;
+            var ConfigWelcomeChannelMessage = db.get(
+                `ConfigWelcomeChannelMessage_${member.guild.id}.value`
+            );
+            if (ConfigWelcomeChannelMessage == null || undefined)
+                ConfigWelcomeChannelMessage = `**<@!${
       member.id
     }>** just joined. They were invited by **${db.get(
       `Gda_${member.id}_${member.guild.id}.invitedByP`
